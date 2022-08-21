@@ -1,0 +1,77 @@
+import adafruit_sht31d
+import board
+from time import ctime
+from time import sleep
+
+i2c = board.I2C()
+
+sensor = adafruit_sht31d.SHT31D(i2c)
+
+temp_list = []
+rh_list = []
+
+hour_temp = []
+"""List of the temp at the start of the hour"""
+hour_rh = []
+"""List of the relative humidity at the start of the hour"""
+
+
+def main():
+    curr = ctime()
+    file = f'{curr}.txt'
+    f = open(file, 'w')
+    while True:
+        tempc = round(sensor.temperature, 2)
+        tempf = round((tempc * 9/5) + 32, 2)
+        rh = round(sensor.relative_humidity,2)
+        curr = ctime()
+        print(curr)
+        print(f"{tempf}°F  -----  {tempc}°C")
+        #print(f'{rh} RH')
+        
+        if len(temp_list) < 12:
+            temp_list.append(tempf)
+        else:
+            hr = temp_list.pop(0)
+            hour_temp.append(hr)
+            print(hour_temp)
+            temp_list.clear()
+        
+        if len(rh_list) < 12:
+            rh_list.append(rh)
+        else:
+            hrh = rh_list.pop(0)
+            hour_rh.append(hrh)
+            print(hour_rh)
+            rh_list.clear()
+            
+        if len(hour_temp) == 24:
+            o = str(hour_temp)
+            p = str(hour_rh)
+            f.write(f"""
+Hourly Temperatures:
+{o}
+
+Hourly Relative Humidity:
+{p}""")
+            f.close()
+            file = f'{curr}.txt'
+            f = open(file, 'w')
+            hour_temp.clear()
+            hour_rh.clear()
+            
+        
+        
+        print(temp_list)
+        print(rh_list)
+        sleep(300)
+        
+    
+        
+
+
+
+#print(f"{tempf}°F  -----  {tempc}°C")
+#print(f'{rh} RH')
+        
+main()
