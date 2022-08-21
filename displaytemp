@@ -2,7 +2,7 @@ import adafruit_sht31d
 import board
 from inky.auto import auto
 from PIL import ImageFont, Image, ImageDraw
-from font_fedoka_one import FredokaOne
+from font_fedoka_one import '/usr/share/fonts/truetype/liberation'
 from time import ctime, sleep
 
 display = auto()
@@ -11,7 +11,7 @@ display.set_border(display.RED)
 img = Image.new('P', (display.WIDTH, display.HEIGHT))
 draw = ImageDraw.Draw(img)
 
-font = ImageFont.truetype(FedokaOne, 22)
+font = ImageFont.truetype('/usr/share/fonts/truetype/liberation', 22)
 
 message = "Hello, World"
 w, h = font.getsize(message)
