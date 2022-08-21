@@ -2,8 +2,8 @@ import adafruit_sht31d
 import board
 from inky.auto import auto
 from PIL import ImageFont, Image, ImageDraw
-from font_fedoka_one import '/usr/share/fonts/truetype/liberation'
 from time import ctime, sleep
+from datetime import datetime
 
 display = auto()
 display.set_border(display.RED)
@@ -11,14 +11,16 @@ display.set_border(display.RED)
 img = Image.new('P', (display.WIDTH, display.HEIGHT))
 draw = ImageDraw.Draw(img)
 
-font = ImageFont.truetype('/usr/share/fonts/truetype/liberation', 22)
+font = ImageFont.truetype('/usr/share/fonts/truetype/freefont/FreeSans', 22)
 
-message = "Hello, World"
-w, h = font.getsize(message)
+now = datetime.today()
+
+w, h = font.getsize(now)
 x = (display.WIDTH / 2) - (w / 2)
-y = (display.HEIGHT / 2) - (w / 2)
+#y = (display.HEIGHT / 2) - (h / 2)
+y = 0
 
-draw.text((x, y), message, display.RED, font)
+draw.text((x, y), "{m} {d} {h:02d}:{m:02d}".format(m=now.month, d=now.day, h=now.hour, m=now.minuute), display.BLACK, font)
 display.set_image(img)
 display.show()
 
